@@ -1,0 +1,129 @@
+diff -purN nfs.orig/dir.c nfs-0/dir.c
+--- dir.c	2013-05-15 14:34:21.000000000 +0200
++++ dir.c	2013-07-11 04:09:18.947935655 +0200
+@@ -2292,15 +2292,20 @@ static int nfs_open_permission_mask(int 
+ {
+ 	int mask = 0;
+ 
+-	if (openflags & FMODE_READ)
+-		mask |= MAY_READ;
+-	if (openflags & FMODE_WRITE)
+-		mask |= MAY_WRITE;
+-	if (openflags & FMODE_EXEC)
+-		mask |= MAY_EXEC;
++	if (openflags & FMODE_EXEC) {
++		/* ONLY check exec rights */
++		mask = MAY_EXEC;
++	} else {
++		if ((openflags & O_ACCMODE) != O_WRONLY)
++			mask |= MAY_READ;
++		if ((openflags & O_ACCMODE) != O_RDONLY)
++			mask |= MAY_WRITE;
++	}
++
+ 	return mask;
+ }
+ 
++
+ int nfs_may_open(struct inode *inode, struct rpc_cred *cred, int openflags)
+ {
+ 	return nfs_do_access(inode, cred, nfs_open_permission_mask(openflags));
+diff -purN nfs.orig/dkms.conf nfs-0/dkms.conf
+diff -purN nfs.orig/.git/COMMIT_EDITMSG nfs-0/.git/COMMIT_EDITMSG
+diff -purN nfs.orig/.git/config nfs-0/.git/config
+diff -purN nfs.orig/.git/description nfs-0/.git/description
+@@ -0,0 +1 @@
++Unnamed repository; edit this file 'description' to name the repository.
+diff -purN nfs.orig/.git/FETCH_HEAD nfs-0/.git/FETCH_HEAD
+@@ -0,0 +1 @@
++a0534d7f0889e82fe8fd2bd9c51d9f58f203e48e		branch 'master' of github.com:antst/centos-nfs
+diff -purN nfs.orig/.git/HEAD nfs-0/.git/HEAD
+@@ -0,0 +1 @@
++ref: refs/heads/master
+diff -purN nfs.orig/.git/hooks/applypatch-msg.sample nfs-0/.git/hooks/applypatch-msg.sample
+diff -purN nfs.orig/.git/hooks/commit-msg.sample nfs-0/.git/hooks/commit-msg.sample
+diff -purN nfs.orig/.git/hooks/post-commit.sample nfs-0/.git/hooks/post-commit.sample
+diff -purN nfs.orig/.git/hooks/post-receive.sample nfs-0/.git/hooks/post-receive.sample
+diff -purN nfs.orig/.git/hooks/post-update.sample nfs-0/.git/hooks/post-update.sample
+diff -purN nfs.orig/.git/hooks/pre-applypatch.sample nfs-0/.git/hooks/pre-applypatch.sample
+diff -purN nfs.orig/.git/hooks/pre-commit.sample nfs-0/.git/hooks/pre-commit.sample
+diff -purN nfs.orig/.git/hooks/prepare-commit-msg.sample nfs-0/.git/hooks/prepare-commit-msg.sample
+diff -purN nfs.orig/.git/hooks/pre-rebase.sample nfs-0/.git/hooks/pre-rebase.sample
+diff -purN nfs.orig/.git/hooks/update.sample nfs-0/.git/hooks/update.sample
+Binary files nfs.orig/.git/index and nfs-0/.git/index differ
+diff -purN nfs.orig/.git/info/exclude nfs-0/.git/info/exclude
+diff -purN nfs.orig/.git/logs/HEAD nfs-0/.git/logs/HEAD
+diff -purN nfs.orig/.git/logs/refs/heads/master nfs-0/.git/logs/refs/heads/master
+diff -purN nfs.orig/.git/logs/refs/remotes/origin/master nfs-0/.git/logs/refs/remotes/origin/master
+@@ -0,0 +1 @@
++0000000000000000000000000000000000000000 a0534d7f0889e82fe8fd2bd9c51d9f58f203e48e Anton Starikov <ant.starikov@gmail.com> 1373852059 +0200	pull : storing head
+Binary files nfs.orig/.git/objects/05/6a095dfecf46cbeb53e8803a0100ef594cccf6 and nfs-0/.git/objects/05/6a095dfecf46cbeb53e8803a0100ef594cccf6 differ
+diff -purN nfs.orig/.git/objects/19/9bb5543a91ad3dfc1e03e2f85894f78661e4cb nfs-0/.git/objects/19/9bb5543a91ad3dfc1e03e2f85894f78661e4cb
+@@ -0,0 +1 @@
++xçëMK1ÜΩn~≈@/ÌR®DaOES[‹¶∞k•∑ênfipMd'-~–ˇn¢l‘C ÅÁ˝òÃ¶q∏_ùçR)HÆŸ#‹ä∂éºUœH`¨w∞Wç—`^@i›"RåXœ‘VcRÊs±ZÀi)E8¡@º\Êè\ŒX/∆‚Ô–ëÍÙ≥e˘ &.ìuŒE“ø_ãë1Òf)¶ÛªØ¥U…Â=/œc0#Øº©BÌ&ÜÜˆ`kí⁄í≈„|≠4÷¯˛ﬁ=`,i—ÔZÁ;∞Í»ú 5ío›[Áp`=læz>$f˜Ô,8[mj÷iàÃ; ìâd‹Tø⁄™“xB«ÖGÉv»í$TﬁU»UOqáêí:b§4»¬Á~«}¿”µÂ
+\ No newline at end of file
+Binary files nfs.orig/.git/objects/22/644e0c6dbc9594fa554356c2170c4447378149 and nfs-0/.git/objects/22/644e0c6dbc9594fa554356c2170c4447378149 differ
+Binary files nfs.orig/.git/objects/2e/a9e5c27e5521d10b82d893b316c43c85ccad57 and nfs-0/.git/objects/2e/a9e5c27e5521d10b82d893b316c43c85ccad57 differ
+Binary files nfs.orig/.git/objects/31/b592f4e94d668d1bbff97122f86a103412148c and nfs-0/.git/objects/31/b592f4e94d668d1bbff97122f86a103412148c differ
+Binary files nfs.orig/.git/objects/40/14da9852640b400a6f161c530767daf219add5 and nfs-0/.git/objects/40/14da9852640b400a6f161c530767daf219add5 differ
+Binary files nfs.orig/.git/objects/44/7b35c7212c4d4e5a672de28f83d80568bc4c02 and nfs-0/.git/objects/44/7b35c7212c4d4e5a672de28f83d80568bc4c02 differ
+Binary files nfs.orig/.git/objects/47/af9f6b1967059287dda6ea94e20bd82d9e4d83 and nfs-0/.git/objects/47/af9f6b1967059287dda6ea94e20bd82d9e4d83 differ
+Binary files nfs.orig/.git/objects/4a/b177583ba2ac0dd4dab5400ffd9b022d857791 and nfs-0/.git/objects/4a/b177583ba2ac0dd4dab5400ffd9b022d857791 differ
+Binary files nfs.orig/.git/objects/51/54bc7ca678b9289db146b420e53a31095a6d2f and nfs-0/.git/objects/51/54bc7ca678b9289db146b420e53a31095a6d2f differ
+Binary files nfs.orig/.git/objects/53/4d51120f634ddca7ff3625213dc7d0f05ee66a and nfs-0/.git/objects/53/4d51120f634ddca7ff3625213dc7d0f05ee66a differ
+Binary files nfs.orig/.git/objects/55/97f6d41d9f05380727b9f280f4473ea194cf30 and nfs-0/.git/objects/55/97f6d41d9f05380727b9f280f4473ea194cf30 differ
+Binary files nfs.orig/.git/objects/5a/3313fc38cf74b6285b52585a5264a6d85a6e73 and nfs-0/.git/objects/5a/3313fc38cf74b6285b52585a5264a6d85a6e73 differ
+Binary files nfs.orig/.git/objects/5a/dc9cc5d44f313c767741d06954b75aa34a8079 and nfs-0/.git/objects/5a/dc9cc5d44f313c767741d06954b75aa34a8079 differ
+Binary files nfs.orig/.git/objects/5b/1006480bc2dc3d7c07b371573c40d0ea74e4c3 and nfs-0/.git/objects/5b/1006480bc2dc3d7c07b371573c40d0ea74e4c3 differ
+Binary files nfs.orig/.git/objects/61/7ead3d4f7500bb4fcbd1d574990c17cf93a80b and nfs-0/.git/objects/61/7ead3d4f7500bb4fcbd1d574990c17cf93a80b differ
+Binary files nfs.orig/.git/objects/62/96bd71ce6e712e68a6b8887fc139bbc2f27dd6 and nfs-0/.git/objects/62/96bd71ce6e712e68a6b8887fc139bbc2f27dd6 differ
+Binary files nfs.orig/.git/objects/64/30dd84da54903392104de65cece52b8f87010d and nfs-0/.git/objects/64/30dd84da54903392104de65cece52b8f87010d differ
+Binary files nfs.orig/.git/objects/66/341096d97ab15cf165cece12dac5d66cccfa9f and nfs-0/.git/objects/66/341096d97ab15cf165cece12dac5d66cccfa9f differ
+Binary files nfs.orig/.git/objects/69/30bec91bca22a8f8f7cf0548dcfe9cc6964762 and nfs-0/.git/objects/69/30bec91bca22a8f8f7cf0548dcfe9cc6964762 differ
+Binary files nfs.orig/.git/objects/75/16a8aaa42e36bddf5d018f42e8b822224778b2 and nfs-0/.git/objects/75/16a8aaa42e36bddf5d018f42e8b822224778b2 differ
+diff -purN nfs.orig/.git/objects/76/f856e284e4069f710dbabb31c8ad55f1420998 nfs-0/.git/objects/76/f856e284e4069f710dbabb31c8ad55f1420998
+\ No newline at end of file
+diff -purN nfs.orig/.git/objects/77/6061699c19a6642c2816f86df51e33c143ea5c nfs-0/.git/objects/77/6061699c19a6642c2816f86df51e33c143ea5c
+\ No newline at end of file
+Binary files nfs.orig/.git/objects/7c/10c9ac057a37082b02e08b85c15cdc1da7f98c and nfs-0/.git/objects/7c/10c9ac057a37082b02e08b85c15cdc1da7f98c differ
+Binary files nfs.orig/.git/objects/85/1fee16974faacc16bbde3674ce84be9d3cfe8f and nfs-0/.git/objects/85/1fee16974faacc16bbde3674ce84be9d3cfe8f differ
+Binary files nfs.orig/.git/objects/88/68a7d67ff5f4164ff443a8213727e583405ba5 and nfs-0/.git/objects/88/68a7d67ff5f4164ff443a8213727e583405ba5 differ
+Binary files nfs.orig/.git/objects/8b/95cb06569c3f8bfa4b0f05d91d9dc2dd2916d4 and nfs-0/.git/objects/8b/95cb06569c3f8bfa4b0f05d91d9dc2dd2916d4 differ
+Binary files nfs.orig/.git/objects/93/2a5647ef5584c9f0ac01fd8786ba0facfb4f40 and nfs-0/.git/objects/93/2a5647ef5584c9f0ac01fd8786ba0facfb4f40 differ
+Binary files nfs.orig/.git/objects/94/ed9739a80af4deb99a01ea694e8b0507e4427b and nfs-0/.git/objects/94/ed9739a80af4deb99a01ea694e8b0507e4427b differ
+Binary files nfs.orig/.git/objects/99/2ab75dab7229633b976956b8fb495834a5e16e and nfs-0/.git/objects/99/2ab75dab7229633b976956b8fb495834a5e16e differ
+Binary files nfs.orig/.git/objects/99/4a70d733288e4ca5acac4b6889f19fc2ed20fc and nfs-0/.git/objects/99/4a70d733288e4ca5acac4b6889f19fc2ed20fc differ
+Binary files nfs.orig/.git/objects/9c/a75df582221716f22e8ee2b0bc8197813270f6 and nfs-0/.git/objects/9c/a75df582221716f22e8ee2b0bc8197813270f6 differ
+Binary files nfs.orig/.git/objects/a0/3222b2ab8dae1e85e76b278fcc3866a892bfbc and nfs-0/.git/objects/a0/3222b2ab8dae1e85e76b278fcc3866a892bfbc differ
+diff -purN nfs.orig/.git/objects/a0/534d7f0889e82fe8fd2bd9c51d9f58f203e48e nfs-0/.git/objects/a0/534d7f0889e82fe8fd2bd9c51d9f58f203e48e
+\ No newline at end of file
+Binary files nfs.orig/.git/objects/a2/e4b619aad1bff37df3fb91d0dcf3f98f8b41b0 and nfs-0/.git/objects/a2/e4b619aad1bff37df3fb91d0dcf3f98f8b41b0 differ
+Binary files nfs.orig/.git/objects/a7/0e446e1605fa43fb1b23b96418d8296773109f and nfs-0/.git/objects/a7/0e446e1605fa43fb1b23b96418d8296773109f differ
+Binary files nfs.orig/.git/objects/ad/661911a70e3039f5ef69b357b8bf3bdf662ffd and nfs-0/.git/objects/ad/661911a70e3039f5ef69b357b8bf3bdf662ffd differ
+Binary files nfs.orig/.git/objects/b0/35d1036d97570ec52ceddac1b9161fd1508b0a and nfs-0/.git/objects/b0/35d1036d97570ec52ceddac1b9161fd1508b0a differ
+Binary files nfs.orig/.git/objects/b2/57383bb565a1331a68197a53d45545d436225e and nfs-0/.git/objects/b2/57383bb565a1331a68197a53d45545d436225e differ
+Binary files nfs.orig/.git/objects/b2/c64ee200bff5656dded2ce4341f23d71685a0b and nfs-0/.git/objects/b2/c64ee200bff5656dded2ce4341f23d71685a0b differ
+Binary files nfs.orig/.git/objects/b4/ac7a661fe8c98a288240e4e5659ac1a5cd99e1 and nfs-0/.git/objects/b4/ac7a661fe8c98a288240e4e5659ac1a5cd99e1 differ
+Binary files nfs.orig/.git/objects/b4/ffd0146ea61cb2c4ff80fa098d7f1a45200976 and nfs-0/.git/objects/b4/ffd0146ea61cb2c4ff80fa098d7f1a45200976 differ
+Binary files nfs.orig/.git/objects/b5/9bdc809a2b1f52d8b9a38c196001ee9278eafb and nfs-0/.git/objects/b5/9bdc809a2b1f52d8b9a38c196001ee9278eafb differ
+Binary files nfs.orig/.git/objects/be/2ffa1d7d09cfa1f4836ea36f9f0fda4ab75f27 and nfs-0/.git/objects/be/2ffa1d7d09cfa1f4836ea36f9f0fda4ab75f27 differ
+Binary files nfs.orig/.git/objects/bf/4d364ddb19d7e9f00f23727a0b2f5cbfd740cb and nfs-0/.git/objects/bf/4d364ddb19d7e9f00f23727a0b2f5cbfd740cb differ
+Binary files nfs.orig/.git/objects/c0/2f562c94207d59b5edd02212a52b7a1ad15785 and nfs-0/.git/objects/c0/2f562c94207d59b5edd02212a52b7a1ad15785 differ
+Binary files nfs.orig/.git/objects/c2/9028a8841b2414b88238dcf8c0edaddc84d7b9 and nfs-0/.git/objects/c2/9028a8841b2414b88238dcf8c0edaddc84d7b9 differ
+Binary files nfs.orig/.git/objects/c2/d96eaba414ce9154126b6de9f88c5f466d5c8c and nfs-0/.git/objects/c2/d96eaba414ce9154126b6de9f88c5f466d5c8c differ
+Binary files nfs.orig/.git/objects/c3/186b944dc84c1a7f872bf976cd3108cbe7288f and nfs-0/.git/objects/c3/186b944dc84c1a7f872bf976cd3108cbe7288f differ
+Binary files nfs.orig/.git/objects/c3/6db779db300b44da4fec411235c58316234a87 and nfs-0/.git/objects/c3/6db779db300b44da4fec411235c58316234a87 differ
+Binary files nfs.orig/.git/objects/c3/8237e7908f1e939e8a19852f9e50299ce815d3 and nfs-0/.git/objects/c3/8237e7908f1e939e8a19852f9e50299ce815d3 differ
+Binary files nfs.orig/.git/objects/c3/f11a3a09942ae0fff54c1724caf2c91e66813d and nfs-0/.git/objects/c3/f11a3a09942ae0fff54c1724caf2c91e66813d differ
+Binary files nfs.orig/.git/objects/c5/41093a5bf2cf058521a1bddd82c404befb5f38 and nfs-0/.git/objects/c5/41093a5bf2cf058521a1bddd82c404befb5f38 differ
+Binary files nfs.orig/.git/objects/cf/bac3f957de9f0186ed9f42e5ab9e9394bc3b29 and nfs-0/.git/objects/cf/bac3f957de9f0186ed9f42e5ab9e9394bc3b29 differ
+Binary files nfs.orig/.git/objects/da/7b1a3d959303cc1c88bc2f324c92f85be32d8a and nfs-0/.git/objects/da/7b1a3d959303cc1c88bc2f324c92f85be32d8a differ
+Binary files nfs.orig/.git/objects/dd/06b3856ad356c08f406ffaacb84bab1b5d0b39 and nfs-0/.git/objects/dd/06b3856ad356c08f406ffaacb84bab1b5d0b39 differ
+Binary files nfs.orig/.git/objects/fe/a2cef9107dbe2412c985c109d42e51f0170a79 and nfs-0/.git/objects/fe/a2cef9107dbe2412c985c109d42e51f0170a79 differ
+diff -purN nfs.orig/.git/refs/heads/master nfs-0/.git/refs/heads/master
+@@ -0,0 +1 @@
++617ead3d4f7500bb4fcbd1d574990c17cf93a80b
+diff -purN nfs.orig/.git/refs/remotes/origin/master nfs-0/.git/refs/remotes/origin/master
+@@ -0,0 +1 @@
++a0534d7f0889e82fe8fd2bd9c51d9f58f203e48e
+diff -purN nfs.orig/README.md nfs-0/README.md
