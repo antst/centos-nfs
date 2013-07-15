@@ -12,8 +12,8 @@ Applied patches:
 On target host perform next commands (assuming that you already have installed dkms)
 
 ```bash
- git clone https://github.com/antst/centos-nfsd.git /usr/src/centos-nfs-358.11.1
- dkms install -m centos-nfs -v 358.11.1
+ git clone https://github.com/antst/centos-nfsd.git /usr/src/nfs-358.11.1
+ dkms install -m nfs -v 358.11.1
  ```
  
  native module will be masked by this one.
